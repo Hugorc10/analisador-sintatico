@@ -10,7 +10,6 @@ public class Driver {
     /**
      * ver os passos do parsing
      */
-
     static boolean do_debug_parse = false;
 
     String[] my_args;
@@ -23,7 +22,7 @@ public class Driver {
     public Driver(String[] args) {
         //my_args = args;
         my_args = new String[2];
-        my_args[0] = "test.cmm";
+        my_args[0] = "testes/t1.pas";
     }
 
     int func(int i) {
@@ -50,7 +49,7 @@ public class Driver {
                     top = my_parser.parse();
                 }
 
-                // Stop if parsing failed
+                //Para se houver alguma falha no parsing
                 if (my_parser.hasFailed()) {
                     return;
                 }
