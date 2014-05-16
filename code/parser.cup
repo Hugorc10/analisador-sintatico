@@ -23,45 +23,66 @@ parser code
    	   parsing_failed = true;
    	   System.err.println("Syntax error " + sLoc(cur_token).toString() + " Got: " + cur_token.toString());
    }
-   
+
    public boolean hasFailed() { return parsing_failed;}
 :}
 
 /* Terminais (tokens retornados pelo scanner). */
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD,DOT,DOTDOT,COMMA;
-terminal           SMALLER,GREATER,SMEQ,GTEQ,EQL,NEQ,ASSIGN,AND,OR,NOT;
-terminal           UMINUS, LPAREN, RPAREN, LBRACKET,RBRACKET,PBRACKET,LBRACE,RBRACE;
-terminal           TINT, TBOOL,TVOID,WHILE,FOR,IF,SELF,ELSE,CLASS,EXTENDS,NEW,RETURN;
-terminal Integer   NUMBER;
-terminal String    ID;
+terminal	UNDER, PONT, VIRG, PVIR, DPON, APAR, FPAR, ACOL, FCOL;
+terminal	ACHA, FCHA, MAIS, MENOS, ASPA, APOS, BARR, PIPE;
+terminal	EXCL, PERG, MAIOR, MENOR, IGUAL, MULT, DIV;
+terminal	BEGIN, END, BYTE, STRING, WHILE, IF, ELSE, AND, OR, NOT;
+terminal	IGUALI, DIFE, MAIORQ, MENORQ, READLN, WRITE, WRITELN;
+terminal	TRUE, FALSE, BOOLEAN, FINAL, INT, IDEN, INTCONS, TIPO;
 
 /* Não-Terminais */
 
 	/********* FILL IN ********/
-non terminal program, tokenlist, token;
+non terminal program, decl_var, decl_cons, bloco, atrib, repet, expr;
+non terminal cond, nulo, leit, escri;
+
+non terminal tipo, vars, var;
+
+//non terminal program, tokenlist, token;
 
 /* Precedencia */
 
 	/********* FILL IN ********/
 
 /* A gramática */
+start with program ;
+
+program ::= BEGIN decl_var END PONT{: System.out.println(""); :} ;
+
+decl_var ::= TIPO vars ;
+
+vars ::= IDEN PVIR {: System.out.println("decl variável"); :}| IDEN VIRG vars {: System.out.println("decl variáveis"); :}
+	| IDEN IGUAL tipo PVIR{: System.out.println("decl variável valor"); :} 
+	| IDEN IGUAL tipo VIRG vars{: System.out.println("decl variáveis valor"); :} 
+	;
+
+
+tipo ::= BYTE {: System.out.println("valor byte"); :}| STRING {: System.out.println("valor string"); :}
+	| BOOLEAN {: System.out.println("valor boolean"); :}| INT {: System.out.println("valor int"); :};
+
+
 
 	/********* FILL IN ********/
 	
 	
 	/* the following is provided only as an example... you will want to change all of it! */
-start with program ;
+//start with program ;
 
-program ::= tokenlist {: System.out.println("tokenlist"); System.out.println("program"); :}
-		;
-tokenlist ::= token {: System.out.println("token"); :}
-		| token {: System.out.println("token"); :} tokenlist {: /* nothing here yet */ :}
-		;
-token ::= SEMI {: System.out.println("SEMI token"); :}
-		| PLUS | MINUS | TIMES | DIVIDE | MOD | DOT | DOTDOT | COMMA | 
-		SMALLER | GREATER | SMEQ | GTEQ | EQL | NEQ | ASSIGN | AND | OR | NOT | 
-		UMINUS | LPAREN | RPAREN | LBRACKET | RBRACKET | PBRACKET | LBRACE | RBRACE | 
-		TINT | TBOOL | TVOID | WHILE | FOR | IF | SELF | ELSE | CLASS | EXTENDS | NEW | RETURN | 
-		NUMBER:n {: System.out.println("NUMBER:" + n); :} 
-		| ID:id {: System.out.println("ID:" + id); :}
-		;
+//program ::= tokenlist {: System.out.println("tokenlist"); System.out.println("program"); :}
+//		;
+//tokenlist ::= token {: System.out.println("token"); :}
+//		| token {: System.out.println("token"); :} tokenlist {: /* nothing here yet */ :}
+//		;
+//token ::= SEMI {: System.out.println("SEMI token"); :}
+//		| PLUS | MINUS | TIMES | DIVIDE | MOD | DOT | DOTDOT | COMMA | 
+//		SMALLER | GREATER | SMEQ | GTEQ | EQL | NEQ | ASSIGN | AND | OR | NOT | 
+//		UMINUS | LPAREN | RPAREN | LBRACKET | RBRACKET | PBRACKET | LBRACE | RBRACE | 
+//		TINT | TBOOL | TVOID | WHILE | FOR | IF | SELF | ELSE | CLASS | EXTENDS | NEW | RETURN | 
+//		NUMBER:n {: System.out.println("NUMBER:" + n); :} 
+//		| ID:id {: System.out.println("ID:" + id); :}
+//		;

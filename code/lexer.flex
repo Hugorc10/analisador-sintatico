@@ -3,155 +3,114 @@ import java_cup.runtime.*;
       
 %%
    
-   
-/* -----------------Options and Declarations Section----------------- */
-   
-/* 
-   The name of the class JFlex will create will be Lexer.
-   Will write the code to the file Lexer.java. 
-*/
-%class Lexer
 
-/*
-  The current line number can be accessed with the variable yyline
-  and the current column number with the variable yycolumn.
-*/
+%class Lexer
 %line
 %column
-    
-/* 
-   Will switch to a CUP compatibility mode to interface with a CUP
-   generated parser.
-*/
 %cup
-   
-/*
-  Declarations
-   
-  Code between %{ and %}, both of which must be at the beginning of a
-  line, will be copied letter to letter into the lexer class source.
-  Here you declare member variables and functions that are used inside
-  scanner actions.  
-*/
 %{   
     /* To create a new java_cup.runtime.Symbol with information about
        the current token, the token will have no value in this
        case. */
+
     private Symbol symbol(int type) {
         return new LEXSymbol(type, yyline, yycolumn,yytext());
     }
     
     /* Also creates a new java_cup.runtime.Symbol with information
        about the current token, but this object has a value. */
+
     private Symbol symbol(int type, Object value) {
         return new LEXSymbol(type, yyline, yycolumn, value, yytext());
     }
 %}
    
 
-/*
-  Macro Declarations
-  
-  These declarations are regular expressions that will be used latter
-  in the Lexical Rules Section.  
-*/
-   
-/* A line terminator is a \r (carriage return), \n (line feed), or
-   \r\n. */
-LineTerminator = \r|\n|\r\n
-   
-/* White space is a line terminator, space, tab, or line feed. */
-WhiteSpace     = {LineTerminator} | [ \t\f]
-   
-/* A literal integer is is a number beginning with a number between
-   one and nine followed by zero or more numbers between zero and nine
-   or just a zero.  */
-dec_int_lit = 0 | [1-9][0-9]*
-   
-/* A identifier integer is a word beginning a letter between A and
-   Z, a and z, or an underscore followed by zero or more letters
-   between A and Z, a and z, zero and nine, or an underscore. */
-dec_int_id = [A-Za-z_][A-Za-z_0-9]*
-   
-   
-CStart  = (\/\*)
-CEnd    = (\*+\/)
-CBody   = ([^\*]*|\*+[^\/\*])*
-Comment = {CStart}{CBody}{CEnd}
+/* DEFINIR AS OUTRAS EXPRESSOES REGULARES */
+digit=[0-9]
+letter=[A-Za-z]
+alphanumeric={letter}|{digit}
+other_id_char=[_]
+identifier=({letter}|{other_id_char})({alphanumeric}|{other_id_char})*
+int={digit}+
+leftbar=[/][*]
+rightbar=[*][/]
+leftbrace=[{]
+rightbrace=[}]
+nonrightbrace=[^}]
+nonrightbrace2=([^*]|[*][^/])
+comment_body={nonrightbrace}*
+comment_body2={nonrightbrace2}*
+commnetbrace={leftbrace}{comment_body}{rightbrace}
+commnetbar={leftbar}{comment_body2}{rightbar}
+whitespace=[ \r\n\t]
+string=[\"][^\"\n]*[\"]
+invalid=({digit}+({letter}|[_]|[!]|[@]|[#]|[$]|[%]|[&]|[(]|[\[]|[\]]|[\\])[^\r\s\t\n]*|[\"][^\n\"]*[\n])
    
 %%
-/* ------------------------Lexical Rules Section---------------------- */
-   
-/*
-   This section contains regular expressions and actions, i.e. Java
-   code, that will be executed when the scanner matches the associated
-   regular expression. */
-   
-   /* YYINITIAL is the state at which the lexer begins scanning.  So
-   these regular expressions will only be matched if the scanner is in
-   the start state YYINITIAL. */
-   
+
 <YYINITIAL> {
    
     /* Print the token found that was declared in the class sym and then
        return it. */
-    ";"                { return symbol(sym.SEMI); }
-    "+"                { return symbol(sym.PLUS); }
-    "-"                { return symbol(sym.MINUS); }
-    "*"                { return symbol(sym.TIMES); }
-    "/"                { return symbol(sym.DIVIDE); }
-    "<"                { return symbol(sym.SMALLER); }
-    ">"                { return symbol(sym.GREATER); }
-    "<="               { return symbol(sym.SMEQ); }
-    ">="               { return symbol(sym.GTEQ); }
-    "=="               { return symbol(sym.EQL); }
-    "!="               { return symbol(sym.NEQ); }
-    "="                { return symbol(sym.ASSIGN); }
-    "&&"               { return symbol(sym.AND); }
-    "||"               { return symbol(sym.OR); }
-    "!"                { return symbol(sym.NOT); }
-    "%"                { return symbol(sym.MOD); }
-    "("                { return symbol(sym.LPAREN); }
-    ")"                { return symbol(sym.RPAREN); }
-    "["                { return symbol(sym.LBRACKET); }
-    "]"                { return symbol(sym.RBRACKET); }
-    "[]"               { return symbol(sym.PBRACKET); }
-    "{"                { return symbol(sym.LBRACE); }
-    "}"                { return symbol(sym.RBRACE); }
-    "."                { return symbol(sym.DOT); }
-    ".."               { return symbol(sym.DOTDOT);}
-    ","                { return symbol(sym.COMMA); }
-    "int"              { return symbol(sym.TINT);}
-    "bool"             { return symbol(sym.TBOOL);}
-    "for"			   { return symbol(sym.FOR);}
-    "void"             { return symbol(sym.TVOID);}
-    "while"            { return symbol(sym.WHILE);}
-    "if"               { return symbol(sym.IF);}   
-    "else"             { return symbol(sym.ELSE);}
-    "self"             { return symbol(sym.SELF);}
-    "class"            { return symbol(sym.CLASS);}
-    "extends"          { return symbol(sym.EXTENDS);}
-    "new"              { return symbol(sym.NEW);}
-    "return"           { return symbol(sym.RETURN);}
 
-    /* If an integer is found print it out, return the token NUMBER
-       that represents an integer and the value of the integer that is
-       held in the string yytext which will get turned into an integer
-       before returning */
-    {dec_int_lit}      { return symbol(sym.NUMBER, new Integer(yytext())); }
-   
-    /* If an identifier is found print it out, return the token ID
-       that represents an identifier and the default value one that is
-       given to all identifiers. */
-    {dec_int_id}       { return symbol(sym.ID, new String(yytext()));}
-   
-    /* Don't do anything if whitespace is found */
-    {WhiteSpace}       { /* just skip what was found, do nothing */ }   
-    {Comment}		   { System.out.println("Lexeme for comment [" + yytext()+"]"); }
+    "_"                { return symbol(sym.UNDER); }
+    "."                { return symbol(sym.PONT); }
+    ","                { return symbol(sym.VIRG); }
+    ";"                { return symbol(sym.PVIR); }
+    ":"                { return symbol(sym.DPON); }
+    "("                { return symbol(sym.APAR); }
+    ")"                { return symbol(sym.FPAR); }
+    "["                { return symbol(sym.ACOL); }
+    "]"                { return symbol(sym.FCOL); }
+    "{"                { return symbol(sym.ACHA); }
+    "}"                { return symbol(sym.FCHA); }
+    "+"                { return symbol(sym.MAIS); }
+    "-"                { return symbol(sym.MENOS); }
+    "\""                { return symbol(sym.ASPA); }
+    "\'"                { return symbol(sym.APOS); }
+    "\\"                { return symbol(sym.BARR); }
+    "|"                { return symbol(sym.PIPE); }
+    "!"                { return symbol(sym.EXCL); }
+    "?"                { return symbol(sym.PERG); }
+    ">"                { return symbol(sym.MAIOR); }
+    "<"                { return symbol(sym.MENOR); }
+    "="                { return symbol(sym.IGUAL); }
+    "*"                { return symbol(sym.MULT); }
+    "\/"                { return symbol(sym.DIV); }
+    "begin"              { return symbol(sym.BEGIN);}
+    "end"              { return symbol(sym.END);}
+    "byte"              { return symbol(sym.TIPO);}
+    "string"              { return symbol(sym.TIPO);}
+    "while"              { return symbol(sym.WHILE);}
+    "if"              { return symbol(sym.IF);}
+    "else"              { return symbol(sym.ELSE);}
+    "and"              { return symbol(sym.AND);}
+    "or"              { return symbol(sym.OR);}
+    "not"              { return symbol(sym.NOT);}
+    "=="              { return symbol(sym.IGUALI);}
+    "<>"              { return symbol(sym.DIFE);}
+    "<="              { return symbol(sym.MAIORQ);}
+    ">="              { return symbol(sym.MENORQ);}
+    "readln"              { return symbol(sym.READLN);}
+    "write"              { return symbol(sym.WRITE);}
+    "writeln"              { return symbol(sym.WRITELN);}
+    "true"              { return symbol(sym.TRUE);}
+    "false"              { return symbol(sym.FALSE);}
+    "boolean"              { return symbol(sym.TIPO);}
+    "final"              { return symbol(sym.FINAL);}
+    "int"              { return symbol(sym.TIPO);}
+
+
+/* TOKENS DEFINIDOS PELAS EXPRESSOS REGULARES */ 
+{int} { return symbol(sym.INT, new Integer(yytext())); } 
+{string} { return symbol(sym.STRING, new String(yytext())); }  
+{commnetbar} {/* Comments */ }
+{commnetbrace} { /* Comments. */ } 
+{whitespace} {/* Ignore whitespace */; }
+{identifier} { return symbol(sym.IDEN, new String(yytext()));}
+{invalid} { throw new Error(" caracter invalido, linha: "+ yyline +" <"+yytext()+">"); }
+ 
 }
 
-
-/* No token was found for the input so through an error.  Print out an
-   Illegal character message with the illegal character that was found. */
-[^]                    { throw new Error("Illegal character <"+yytext()+">"); }
    

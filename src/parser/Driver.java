@@ -22,7 +22,7 @@ public class Driver {
     public Driver(String[] args) {
         //my_args = args;
         my_args = new String[2];
-        my_args[0] = "testes/t1.pas";
+        my_args[0] = "testes/teste.pas";
     }
 
     int func(int i) {
@@ -54,19 +54,19 @@ public class Driver {
                     return;
                 }
 
-                System.out.println("Parsing Completed. Top symbol = "
+                System.out.println("Parsing Concluido. Símbolo do topo = "
                         + top.sym);
 
             } catch (Error e) {
-                System.out.println("error(1) was:" + e.toString());
+                System.out.println(e.toString());
             } catch (Exception e) {
                 /* do cleanup here -- possibly rethrow e */
-                System.out.println("error(2) was:" + e.toString());
+                //System.out.println("error(2) was:" + e.toString());
             } finally {
                 /* do close out here */
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }
