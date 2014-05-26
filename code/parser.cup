@@ -43,9 +43,6 @@ non terminal decls, tipo, vars, expr_log, expr, op_log, decl_if;
 non terminal op_log_num, bloco, cmd, io, atr, calc;
 non terminal decl_con, op_arit, list_exp, decl_while, expr_simples ;
 
-//non terminal program, tokenlist, token;
-/* Precedencia */
-	/********* FILL IN ********/
 /* A gramática */
 
 //Define derivação raiz
