@@ -1,0 +1,10 @@
+begin
+  int i;
+  int nota1, nota2, nota3;
+  boolean aprovado = false;
+  int soma;
+  soma = nota1 + nota2 + nota3;
+  if (soma >= 60)
+     writeln,"Aprovado"
+ else writeln, "Reprovado";
+end.

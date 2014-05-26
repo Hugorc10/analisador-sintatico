@@ -22,7 +22,7 @@ public class Driver {
     public Driver(String[] args) {
         //my_args = args;
         my_args = new String[2];
-        my_args[0] = "testes/teste.pas";
+        my_args[0] = "testes/t1.u";
     }
 
     int func(int i) {

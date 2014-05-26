@@ -1,10 +1,11 @@
 begin
-	i: int;
+	int i;
 	i = 0;
 	while (i < 10) begin
-		if (i == 0) then
+		if (i == 0)
+		begin
 			i = i + 1;
 		end;
-      i = i + 1;
+      		i = i + 1;
 	end;
 end.

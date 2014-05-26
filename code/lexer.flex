@@ -95,14 +95,15 @@ invalid=({digit}+({letter}|[_]|[!]|[@]|[#]|[$]|[%]|[&]|[(]|[\[]|[\]]|[\\])[^\r\s
     "readln"              { return symbol(sym.READLN);}
     "write"              { return symbol(sym.WRITE);}
     "writeln"              { return symbol(sym.WRITELN);}
-    "true"              { return symbol(sym.TRUE);}
-    "false"              { return symbol(sym.FALSE);}
+    "true"              { return symbol(sym.BOOLEAN);}
+    "false"              { return symbol(sym.BOOLEAN);}
     "boolean"              { return symbol(sym.TIPO);}
     "final"              { return symbol(sym.FINAL);}
     "int"              { return symbol(sym.TIPO);}
 
 
 /* TOKENS DEFINIDOS PELAS EXPRESSOS REGULARES */ 
+
 {int} { return symbol(sym.INT, new Integer(yytext())); } 
 {string} { return symbol(sym.STRING, new String(yytext())); }  
 {commnetbar} {/* Comments */ }
