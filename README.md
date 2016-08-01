@@ -1,3 +1,4 @@
-Analisador Léxico e Sintático
+Lexical analyzer and parser
 ===========================
-Analisador léxico e sintático para uma linguagem de programação fictícia baseada em C e Pascal. Foi utilizado a linguagem Java e as bibliotecas JFlex e CUP para a contrução da ferramenta.
+
+Lexical analyzer and Parser for a fictional programming language based on C and Pascal. The tool was made in Java using the JFlex and CUP libraries.
