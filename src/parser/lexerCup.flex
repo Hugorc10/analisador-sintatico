@@ -1,14 +1,14 @@
 package parser;
+
 import componentes.sym;import java_cup.runtime.*;
-      
+
 %%
-   
 
 %class Lexer
 %line
 %column
 %cup
-%{   
+%{
     /* To create a new java_cup.runtime.Symbol with information about
        the current token, the token will have no value in this
        case. */
@@ -16,7 +16,7 @@ import componentes.sym;import java_cup.runtime.*;
     private Symbol symbol(int type) {
         return new LEXSymbol(type, yyline, yycolumn,yytext());
     }
-    
+
     /* Also creates a new java_cup.runtime.Symbol with information
        about the current token, but this object has a value. */
 
@@ -24,7 +24,7 @@ import componentes.sym;import java_cup.runtime.*;
         return new LEXSymbol(type, yyline, yycolumn, value, yytext());
     }
 %}
-   
+
 
 /* DEFINIR AS OUTRAS EXPRESSOES REGULARES */
 digit=[0-9]
@@ -46,11 +46,11 @@ commnetbar={leftbar}{comment_body2}{rightbar}
 whitespace=[ \r\n\t]
 string=[\"][^\"\n]*[\"]
 invalid=({digit}+({letter}|[_]|[!]|[@]|[#]|[$]|[%]|[&]|[(]|[\[]|[\]]|[\\])[^\r\s\t\n]*|[\"][^\n\"]*[\n])
-   
+
 %%
 
 <YYINITIAL> {
-   
+
     /* Print the token found that was declared in the class sym and then
        return it. */
 
@@ -102,16 +102,14 @@ invalid=({digit}+({letter}|[_]|[!]|[@]|[#]|[$]|[%]|[&]|[(]|[\[]|[\]]|[\\])[^\r\s
     "int"              { return symbol(sym.TIPO);}
 
 
-/* TOKENS DEFINIDOS PELAS EXPRESSOS REGULARES */ 
+/* TOKENS DEFINIDOS PELAS EXPRESSOS REGULARES */
 
-{int} { return symbol(sym.INT, new Integer(yytext())); } 
-{string} { return symbol(sym.STRING, new String(yytext())); }  
+{int} { return symbol(sym.INT, new Integer(yytext())); }
+{string} { return symbol(sym.STRING, new String(yytext())); }
 {commnetbar} {/* Comments */ }
-{commnetbrace} { /* Comments. */ } 
+{commnetbrace} { /* Comments. */ }
 {whitespace} {/* Ignore whitespace */; }
 {identifier} { return symbol(sym.IDEN, new String(yytext()));}
 {invalid} { throw new Error(" caracter invalido, linha: "+ yyline +" <"+yytext()+">"); }
- 
-}
 
-   
+}

@@ -3,7 +3,7 @@ begin
   int i;
   i = 0;
 /*******************Programa conta ate mil*********************/
-while (i <= 1000) begin
+while (i <= 1000);
     writeln, i;
     i = i + 1;
   end;
